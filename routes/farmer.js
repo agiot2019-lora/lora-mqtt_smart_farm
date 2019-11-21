@@ -3,6 +3,23 @@ var router = express.Router();
 var request = require('request');
 const util = require('util');
 
+
+//get user's farm information
+function get_user_farm_info(user_id, cb) {
+    var myfarms = new Array();
+    var sqlquery = "SELECT  * FROM farms WHERE user_id = ?";
+    connection.query(sqlquery, user_id, function (err, rows) {
+        if (err) {
+            console.log("no match");
+            cb(false, []);
+        } else {
+            console.log("found my farms list successfully");
+            myfarms = rows;
+            cb(true, myfarms);
+        }
+    });
+}
+
 //get user's info from user_id
 function get_user_info(user_id, cb) {
     var myinfo = new Array();
@@ -10,11 +27,17 @@ function get_user_info(user_id, cb) {
     connection.query(sqlquery, user_id, function (err, rows) {
         if (err) {
             console.log("no match");
-            cb(false, []);
+            cb(false, [], []);
         } else {
             console.log("user login successfully");
             myinfo = rows;
-            cb(true, myinfo);
+            get_user_farm_info(user_id, function (result, myfarms){
+                if(result==true){
+                    cb(true,myinfo,myfarms);
+                }else{
+                    cb(true,myinfo,[])
+                }
+            });
         }
     });
 }
@@ -22,43 +45,19 @@ function get_user_info(user_id, cb) {
 /* GET users listing. */
 router.get('/', function (req, res, next) {
     var user_id = req.session.user_id;
-    get_user_info(user_id, function (result, myinfo, mycompany, mytickets) {
+    get_user_info(user_id, function (result, myinfo, myfarms) {
         if (result == true) {
-            console.log("mytickets: ", mytickets);
-            console.log("myinfo: ", myinfo);
-            console.log("mycompany : ", mycompany);
-            res.render('emitter/mypage', {
+            res.render('mypage', {
                 myinfo: myinfo,
-                mycompany: mycompany,
-                mytickets: mytickets
+                myfarms: myfarms
             });
         } else {
-            res.render('emitter/mypage', {
+            res.render('mypage', {
                 myinfo: [],
-                mycompany: [],
-                mytickets: []
+                myfarms: []
             });
         }
     })
 });
-
-//전자 인계서 작성 페이지 불러오기
-router.get('/form', function (req, res, next) {
-    res.render('emitter/electronic_form', {
-        waste_code: '',
-        handler: '',
-        handle_method: '',
-        handle_address: '',
-        conveyancer: '',
-        conveyancer_car_num: '',
-        user_id: req.session.user_id,
-        waste_index: '',
-    });
-});
-
-
-
-
-
 
 module.exports = router;

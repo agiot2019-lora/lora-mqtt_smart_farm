@@ -14,9 +14,8 @@ var async = require('async');
 
 // routing
 var index = require('./routes/index');
-var admin = require('./routes/admin');
 var farmer = require('./routes/farmer');
-
+var farm = require('./routes/farm');
 
 //var network = require('./recycling_tracker/network.js');
 
@@ -43,7 +42,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/admin', admin);
 app.use('/farmer', farmer);
-
 
 connection = mysql.createConnection({
   host     : 'localhost',
