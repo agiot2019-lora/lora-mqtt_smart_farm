@@ -7555,7 +7555,7 @@ sub {
   color: #abafb3; }
 
 .footer {
-  padding-left: 15.1875rem;
+  padding-left: 0;
   background-color: #fff; }
   .footer .copyright {
     padding: 0.9375rem;
