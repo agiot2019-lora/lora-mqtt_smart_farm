@@ -28,14 +28,14 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   background-image: linear-gradient(230deg, #ff7e7e, #bf0426); }
 
 .gradient-2, .dropdown-mega-menu .ext-link.link-3 a {
-  background-image: linear-gradient(230deg, #9cd871,   #7bbf4b); }
-
+  background-image: linear-gradient(230deg,#ffae4b, #ff8c00 ); }
+  
 .gradient-3, .dropdown-mega-menu .ext-link.link-2 a, .header-right .icons .user-img .activity {
-  background-image: linear-gradient(230deg,#d6e651, #afbf30); }
+  background-image: linear-gradient(230deg,#9cd871,   #7bbf4b); }
 
 .gradient-4, .sidebar-right .nav-tabs .nav-item .nav-link.active::after, .sidebar-right .nav-tabs .nav-item .nav-link.active span i::before {
-  background-image: linear-gradient(230deg, #f8b35e, #d9851e); }
-
+  background-image: linear-gradient(230deg,#d6e651, #afbf30 ); }
+  
 .gradient-5 {
   background-image: linear-gradient(to right, #f83600 0%, #f9d423 100%); }
 
