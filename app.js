@@ -36,6 +36,10 @@ app.get("/login", (req, res) => {
 app.get("/mypage", (req, res) => {
   res.render("mypage");
 });
+
+app.get("/farm", (req, res) => {
+  res.render("farm");
+});
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(express.urlencoded({extended: false}));
