@@ -6735,7 +6735,7 @@ button.bg-dark:focus {
   color: #fff !important; }
 
 .text-primary {
-  color: #7571f9 !important; }
+  color: #7BBF4B !important; }
 
 a.text-primary:hover, a.text-primary:focus {
   color: #4540f7 !important; }
@@ -9589,7 +9589,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
     padding-right: 5px; }
   .login-form__btn.submit {
     padding: 15px 40px;
-    background: #7571f9;
+    background:#7BBF4B;
     font-weight: 700; }
 
 .login-form__intro p, .login-form__intro h4 {
