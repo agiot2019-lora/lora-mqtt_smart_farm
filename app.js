@@ -25,6 +25,13 @@ var app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(express.urlencoded({extended: false}));
