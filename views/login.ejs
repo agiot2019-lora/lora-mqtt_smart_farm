@@ -50,12 +50,14 @@
                 <div class="card-body pt-5">
                   <a class="text-center" href="index.html"> <h4>Login</h4></a>
 
-                  <form class="mt-5 mb-5 login-input">
+                  <form method="post" action="/login" >
+                        <!--class="mt-5 mb-5 login-input">-->
                     <div class="form-group">
-                      <input type="ID" class="form-control" placeholder="ID" />
+                      <input name= "user_id" type="text" class="form-control" placeholder="ID" />
                     </div>
                     <div class="form-group">
                       <input
+                              name="user_pw"
                         type="password"
                         class="form-control"
                         placeholder="Password"

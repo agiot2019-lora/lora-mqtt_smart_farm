@@ -17,29 +17,18 @@ var index = require("./routes/index");
 var farmer = require("./routes/farmer");
 var farm = require("./routes/farm");
 
-//var network = require('./recycling_tracker/network.js');
+var ttn = require("ttn");
 
+const appID = "ksw2019agiot";
+const accessKey = "ttn-account-v2.nJAy-JFHF3lX1Pl6iy84cGHEw_MwdIc6h-nNGsgwL8k";
+//var client = new ttn.Client(appID, accessKey, 'us.thethings.network:1883');
 var app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-app.get("/register", (req, res) => {
-  res.render("register");
-});
 
-app.get("/login", (req, res) => {
-  res.render("login");
-});
-
-app.get("/mypage", (req, res) => {
-  res.render("mypage");
-});
-
-app.get("/farm", (req, res) => {
-  res.render("farm");
-});
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(express.urlencoded({extended: false}));
@@ -57,13 +46,13 @@ app.use(
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", index);
-//app.use('/admin', admin);
-//app.use('/farmer', farmer);
+app.use("/farm", farm);
+app.use("/farmer", farmer);
 
 connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "pw",
+  password: "",
   port: 3306,
   database: "agiot"
 });
@@ -83,6 +72,45 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
+//ttn connection
+ttn.data(appID, accessKey).then(function (client) {
+        client.on("uplink", function (devID, payload) {
+            console.log("Received uplink from ", devID)
+            console.log(payload);
+            var fields=payload.payload_fields;
+            var metadata=payload.metadata;
+            var soil_moisture=fields['luminosity_3'];
+            var time=metadata['time'];
+            var humidity=fields['relative_humidity_2'];
+            var temperature=fields['temperature_1'];
+
+            var farm_id=1; // needs to edit
+            //insert to database
+            var sql = "INSERT INTO soil_moisture (s_datetime, soil_moisture, farm_id) VALUES (?,?,?)";
+            connection.query(sql, [time,soil_moisture,farm_id], function (err) {
+                if (err) {
+                    console.log("inserting data failed");
+                    throw err;
+                } else {
+                    console.log("soil_moisture inserted successfully");
+                    var sqlquery3 = "UPDATE sensors SET temperature=?, humidity=? WHERE farm_id=?";
+                    connection.query(sqlquery3, [temperature, humidity,farm_id], function (err) {
+                        if (err) {
+                            console.log("inserting data failed");
+                            throw err;
+                        } else {
+                            console.log("inserting sensor data successfully");
+                        }
+                    });
+                }
+            })
+        })
+    })
+    .catch(function (error) {
+        console.error("Error", error)
+        process.exit(1)
+    })
+
 console.log("app");
 var server = app.listen(3000);
 module.exports = app;

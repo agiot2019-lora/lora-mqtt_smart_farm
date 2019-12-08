@@ -3,7 +3,6 @@ var router = express.Router();
 var request = require('request');
 const util = require('util');
 
-
 //get user's farm information
 function get_user_farm_info(user_id, cb) {
     var myfarms = new Array();
@@ -14,7 +13,15 @@ function get_user_farm_info(user_id, cb) {
             cb(false, []);
         } else {
             console.log("found my farms list successfully");
-            myfarms = rows;
+            for(var i=0; i<rows.length; i++){
+                var farm_info={
+                    farm_id :rows[i].farm_id,
+                    farm_name: rows[i].farm_name,
+                    farm_location: rows[i].farm_location
+                };
+                myfarms.push(farm_info);
+            }
+
             cb(true, myfarms);
         }
     });
@@ -30,7 +37,12 @@ function get_user_info(user_id, cb) {
             cb(false, [], []);
         } else {
             console.log("user login successfully");
-            myinfo = rows;
+            var user_info={
+                user_name : rows[0].user_name,
+                user_contact : rows[0].user_contact,
+                user_id : rows[0].user_id
+        };
+            myinfo.push(user_info);
             get_user_farm_info(user_id, function (result, myfarms){
                 if(result==true){
                     cb(true,myinfo,myfarms);
@@ -47,14 +59,16 @@ router.get('/', function (req, res, next) {
     var user_id = req.session.user_id;
     get_user_info(user_id, function (result, myinfo, myfarms) {
         if (result == true) {
-            res.render('mypage', {
+            res.render('farmer', {
                 myinfo: myinfo,
-                myfarms: myfarms
+                myfarms: myfarms,
+                user_id: user_id
             });
         } else {
-            res.render('mypage', {
+            res.render('farmer', {
                 myinfo: [],
-                myfarms: []
+                myfarms: [],
+                user_id: user_id
             });
         }
     })

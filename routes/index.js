@@ -9,9 +9,18 @@ console.log('index');
 /* GET home page. */
 router.get('/', function (req, res, next) {
   console.log('get homepage');
+  if(req.session.user_id){
         res.render('index', {
-          title: "Home"
+          title: "Home",
+          user_id: req.session.user_id
         });
+    }else{
+    res.redirect('/login');
+ /*   res.render('index', {
+      title: "Home",
+      user_id: -1
+    });*/
+  }
 })
 
 router.get('/signup', function (req, res, next) {
@@ -26,7 +35,7 @@ router.post('/signup', function (req, res, next) {
   var user_pw = req.body.user_pw;
   var user_name = req.body.user_name;
   var user_contact = req.body.user_contact;
-
+  console.log(user_id);
   var sqlquery = "SELECT * FROM users WHERE user_id = ?";
   connection.query(sqlquery, user_id, function (err, rows) {
     console.log(rows)
