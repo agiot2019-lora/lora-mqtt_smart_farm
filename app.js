@@ -83,10 +83,9 @@ ttn.data(appID, accessKey).then(function (client) {
             var time=metadata['time'];
             var humidity=fields['relative_humidity_2'];
             var temperature=fields['temperature_1'];
-
             var farm_id=1; // needs to edit
             //insert to database
-            var sql = "INSERT INTO soil_moisture (s_datetime, soil_moisture, farm_id) VALUES (?,?,?)";
+            var sql = "INSERT INTO soil_moisture (s_datetime,soil_moisture, farm_id) VALUES (?,?,?)";
             connection.query(sql, [time,soil_moisture,farm_id], function (err) {
                 if (err) {
                     console.log("inserting data failed");
@@ -111,6 +110,8 @@ ttn.data(appID, accessKey).then(function (client) {
         process.exit(1)
     })
 
+ 
+    
 console.log("app");
 var server = app.listen(3000);
 module.exports = app;
