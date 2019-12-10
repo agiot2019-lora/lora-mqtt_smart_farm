@@ -34,7 +34,7 @@
         Preloader end
     ********************-->
 
-    
+
     <!--**********************************
         Main wrapper start
     ***********************************-->
@@ -46,8 +46,8 @@
         <div class="nav-header">
             <div class="brand-logo">
                 <a href="/">
-                    <b class="logo-abbr"><img src="images/logo.png" alt=""> </b>
-                    <span class="logo-compact"><img src="images/logo-compact.png" alt=""></span>
+                    <b class="logo-abbr"><img src="/images/logo.png" alt=""> </b>
+                    <span class="logo-compact"><img src="/images/logo-compact.png" alt=""></span>
                     <span class="brand-title">
                         <img src="images/logo-text.png" alt="">
                     </span>
@@ -61,9 +61,9 @@
         <!--**********************************
             Header start
         ***********************************-->
-        <div class="header">    
+        <div class="header">
             <div class="header-content clearfix">
-                
+
                 <div class="nav-control">
                     <div class="hamburger">
                         <span class="toggle-icon"><i class="icon-menu"></i></span>
@@ -72,9 +72,11 @@
                 <div class="header-left">
                     <div class="input-group icons">
                         <div class="input-group-prepend">
-                            <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i class="mdi mdi-magnify"></i></span>
+                            <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i
+                                    class="mdi mdi-magnify"></i></span>
                         </div>
-                        <input type="search" class="form-control" placeholder="Search Dashboard" aria-label="Search Dashboard">
+                        <input type="search" class="form-control" placeholder="Search Dashboard"
+                            aria-label="Search Dashboard">
                         <div class="drop-down animated flipInX d-md-none">
                             <form action="#">
                                 <input type="text" class="form-control" placeholder="Search">
@@ -85,20 +87,20 @@
                 <div class="header-right">
                     <ul class="clearfix">
                         <li class="icons dropdown">
-                            <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
+                            <div class="user-img c-pointer position-relative" data-toggle="dropdown">
                                 <span class="activity active"></span>
                                 <img src="/images/farmer.png" height="40" width="40" alt="">
                             </div>
                             <div class="drop-down dropdown-profile animated fadeIn dropdown-menu">
                                 <div class="dropdown-content-body">
                                     <ul>
-                                            <li>
-                                                <a href="/farmer"><i class="icon-user"></i> <span>Profile</span></a>
-                                            </li>
+                                        <li>
+                                            <a href="/farmer"><i class="icon-user"></i> <span>Profile</span></a>
+                                        </li>
 
-                                            <hr class="my-2">
+                                        <hr class="my-2">
 
-                                            <li><a href="/logout"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                        <li><a href="/logout"><i class="icon-key"></i> <span>Logout</span></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -115,6 +117,28 @@
             Content body start
         ***********************************-->
         <div class="content-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-4 col-xl-3">
+                        <h3>Farm Info</h3>
+                        <div class="card">
+                            <div class="card-body">
+                                <img src="/images/farm.png" height="100" width="100" alt="" align="left">
+                                <p>
+                                    &nbsp<strong>Farm Name : </strong> <%=myfarm[0].farm_name%> <br>
+                                    &nbsp<strong>Farm Location :</strong> <%=myfarm[0].farm_location%> <br>
+                                    &nbsp<strong>Farm Technology : </strong>
+                                    <%if(myfarm[0].farm_technology_type==1){%>
+                                    APRS <br>
+                                    <%}else{%>
+                                    LoRA <br>
+                                    <%}%>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+        
+        <div class="content-body">
             <div class="container-fluid mt-3">
                 <div class="row">
                     <div class="col-lg-4 col-sm-6">
@@ -122,50 +146,40 @@
                             <div class="card-body">
                                 <h3 class="card-title text-white">Temperature</h3>
                                 <div class="d-inline-block">
-                                    <h2 class="text-white"><%=sensor_info[0].temperature%>  &#8451</h2>
-                                </div>
-                                <span class="float-right display-5 opacity-5"><i class="fa fa-temperture"></i></span>
+                                    <h2 class="text-white"><%=sensor_info[0].temperature%> &#8451</h2>
                             </div>
+                            <span class="float-right display-5 opacity-5"><i class="fa fa-temperture"></i></span>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-sm-6">
-                        <div class="card gradient-2">
-                            <div class="card-body">
-                                <h3 class="card-title text-white">Humidity</h3>
-                                <div class="d-inline-block">
-                                    <h2 class="text-white"><%=sensor_info[0].humidity%>%</h2>
-                                </div>
-                                <span class="float-right display-5 opacity-5"><i class="fa fa-hummmidity"></i></span>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="card gradient-2">
+                        <div class="card-body">
+                            <h3 class="card-title text-white">Humidity</h3>
+                            <div class="d-inline-block">
+                                <h2 class="text-white"><%=sensor_info[0].humidity%>%</h2>
                             </div>
+                            <span class="float-right display-5 opacity-5"><i class="fa fa-hummmidity"></i></span>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-lg-4 col-sm-6">
-                        <div class="card gradient-4">
-                            <div class="card-body">
-                                <h3 class="card-title text-white">Irrigation system</h3>
-                                <div class="d-inline-block">
-                                    <!-- <h2 class="text-white"> -->
-                                    <label class="switch">
-                                        <input type="checkbox">
-                                        <span class="slider round"></span>
-                                      </label>
-                                    <%if(sensor_info[0].actuator==false){%>
-                                      <p class="toggle">&nbsp;OFF</p>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="card gradient-4">
+                        <div class="card-body">
+                            <h3 class="card-title text-white">Irrigation System</h3>
+                            <div class="d-inline-block">
+                                <div id="farmid" value="<%=farm_id%>">
+                                    <%if(sensor_info[0].actuator == false) {%>
+                                    <button class="btn mb-1 btn-primary btn-lg" onclick="toggle(this, <%=farm_id%>)"
+                                        value="OFF">OFF</button>
                                     <%}else{%>
-                                    <p class="toggle" style="display:none;">&nbsp;ON</p>
-
-                                      <script>var check = $("input[type='checkbox']");
-                                        check.click(function(){
-                                          $(".toggle").toggle();
-                                        });
-                                        </script>
-                                        <!-- </h2> -->
+                                    <button class="btn mb-1 btn-primary btn-lg" onclick="toggle(this,  <%=farm_id%>)"
+                                        value="ON">ON</button>
                                     <%}%>
+                                </div> 
                                 </div>
-                                    
-        
-                                <!-- <span class="float-right display-5 opacity-5"><i class="fa fa-actuator"></i></span> -->
+                                <span class="float-right display-5 opacity-5"><i class="fa fa-shower"></i></span>
                             </div>
                         </div>
                     </div>
@@ -183,26 +197,19 @@
                                         </div>
                                     </div>
                                     length : <%=soil_moisture.length%>
+                                    <%=soil_moisture[soil_moisture.length-1].s_datetime%>
+                                  
                                     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
                                     <script type="text/javascript">
+                                        console.log("datetime:",soil_moisture[soil_moisture.length-1].s_datetime);
                                         google.charts.load('current', {'packages':['corechart']});
                                         google.charts.setOnLoadCallback(drawChart);
                                         function drawChart() {
                                             var data = google.visualization.arrayToDataTable([
-                                                ['Date', 'Soil Moisture'],
-                                                <%if(soil_moisture.length >11){%>
-                                                    <%for (var i=soil_moisture.length-1; i>soil_moisture.length-6; i--){ %>
-                                                        [<%=soil_moisture[i].s_datetime%>, <%=soil_moisture[i].soil_moisture%>],
-                                                    <%}%>
-                                                    [<%=soil_moisture[soil_moisture.length-6].s_datetime%>, <%=soil_moisture[soil_moisture.length-6].soil_moisture%>]
-                                                <%}else{%>
-                                                    <%for(var i=soil_moisture.length-1; i>0; i--){%>
-                                                        [<%=soil_moisture[i].s_datetime%>, <%=soil_moisture[i].soil_moisture%>],
-                                                    <%}%>
-                                                        [<%=soil_moisture[0].s_datetime%>, <%=soil_moisture[0].soil_moisture%>]
-                                                <%}%>
+                                               ['Date', 'Soil Moisture'],
+                                               [soil.moisture.length, 1]
                                             ]);
-
+                                      
                                             var options = {
                                                 title: 'Soil Moisture',
                                                 curveType: 'function',
@@ -214,28 +221,29 @@
                                             chart.draw(data, options);
                                         }
 
-                                    </script>
-                                    <div id="curve_chart" style="width: 900px; height: 500px"></div>
+                                    </script> 
+                                    <div id="curve_chart" style="width: 900px; height: 500px"></div>-->
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                    </div>
+                </div>
             </div>
             <!-- #/ container -->
         </div>
         <!--**********************************
             Content body end
         ***********************************-->
-        
-        
+
+
         <!--**********************************
             Footer start
         ***********************************-->
         <div class="footer">
             <div class="copyright">
-                <p>Copyright &copy; Designed & Developed by <a href="https://themeforest.net/user/quixlab">Quixlab</a> 2018</p>
+                <p>Copyright &copy; Designed & Developed by <a href="https://themeforest.net/user/quixlab">Quixlab</a>
+                    2018</p>
             </div>
         </div>
         <!--**********************************
@@ -274,7 +282,72 @@
     <script src="/plugins/chartist-plugin-tooltips/js/chartist-plugin-tooltip.min.js"></script>
 
     <script src="/js/dashboard/dashboard-1.js"></script>
+    //script for toggle switch
+    <script>
+        function doStuff() {
+            console.log("Irrigation Switch!")
+        }
 
+        function toggle(button, farmID) {
+            console.log("TOGGLE")
+            console.log("FARMID : ", farmID)
+            if (button.value == "OFF") {
+                button.value = "ON"
+                button.innerHTML = "ON"
+                this.interval = setInterval(doStuff, 1000);
+
+                $.ajax({
+                    url: "/farm/actuator",
+                    method: "POST",
+                    data: {
+                        result: "on",
+                        farm_id: farmID
+                    },
+                    success: function (data) {
+                        if (data['success'] == true) {
+                            if (!alert('Actuator Turned On')) {
+                                window.location.reload();
+                            }
+                        }
+                        if (data['success'] == false) {
+                            if (!alert("Actuator Failed to Turn on")) {
+                                window.location.reload();
+                            }
+                        }
+                    },
+                    error: function () {
+                        alert("Actuator Failed to Turn on");
+                    }
+                })
+            } else if (button.value == "ON") {
+                button.value = "OFF"
+                button.innerHTML = "OFF"
+                $.ajax({
+                    url: "/farm/actuator",
+                    method: "POST",
+                    data: {
+                        result: "off",
+                        farm_id: farmID
+                    },
+                    success: function (data) {
+                        if (data['success'] == true) {
+                            if (!alert('Actuator Turned Off')) {
+                                window.location.reload();
+                            }
+                        }
+                        if (data['success'] == false) {
+                            if (!alert("Actuator Failed to Turn Off")) {
+                                window.location.reload();
+                            }
+                        }
+                    },
+                    error: function () {
+                        alert("Actuator Failed to Turn Off");
+                    }
+                });
+            }
+        }
+    </script>
 </body>
 
 </html>

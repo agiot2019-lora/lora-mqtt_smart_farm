@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var request = require('request');
 const util = require('util');
+var async = require('async');
 
 //get sensor info from farm_id
 function get_sensor_info(farm_id, cb) {
@@ -10,7 +11,13 @@ function get_sensor_info(farm_id, cb) {
     connection.query(sqlquery, farm_id, function (err, rows) {
         if (err) {
             console.log("no match");
-            cb(false, []);
+            s_info={
+                temperature: "",
+                humidity:"",
+                actuator:""
+            };
+            sensor_info.push(s_info);
+            cb(true, sensor_info);
         } else {
             console.log("found sensor info");
             if(rows.length!=0){
@@ -23,10 +30,18 @@ function get_sensor_info(farm_id, cb) {
                     actuator:actuator
                 };
                 sensor_info.push(s_info);
+            }else{
+                s_info={
+                    temperature: "",
+                    humidity:"",
+                    actuator:""
+                };
+                sensor_info.push(s_info);
             }
             cb(true,sensor_info);
         }
     });
+    
 }
 
 //get soil moisture info from farm_id
@@ -36,9 +51,14 @@ function get_soil_moisture_info(farm_id, cb) {
     connection.query(sqlquery, farm_id, function (err, rows) {
         if (err) {
             console.log("no match");
-            cb(false, []);
+            var s_moisture = {
+                soil_moisture : "",
+                s_datetime : ""
+            }
+            soil_moisture.push(s_moisture);
         } else {
             console.log("found soil_moisture array");
+            if(rows.length!=0){
             for (var i=0; i<rows.length; i++){
                 var s_moisture = {
                     soil_moisture : rows[i].soil_moisture,
@@ -46,33 +66,46 @@ function get_soil_moisture_info(farm_id, cb) {
                 }
                 soil_moisture.push(s_moisture);
             }
-            cb(true,soil_moisture);
+            }else{
+                var s_moisture = {
+                    soil_moisture : "",
+                    s_datetime : ""
+                }
+                soil_moisture.push(s_moisture);
+            }
         }
+        cb(true,soil_moisture);
     });
 }
 
 //get farm's info from farm_id
 function get_farm_info(farm_id, cb) {
     var myfarm = new Array();
-    var sqlquery = "SELECT  * FROM sensors WHERE farm_id = ?";
+    var sqlquery = "SELECT  * FROM farms WHERE farm_id = ?";
     connection.query(sqlquery, farm_id, function (err, rows) {
         if (err) {
             console.log("no match");
             cb(false, [],[], []);
         } else {
-            console.log("user login successfully");
-            myfarm = rows;
+            console.log("got farm info successfully");
+            console.log(rows);
+            var farm_info={
+                farm_name: rows[0].farm_name,
+                farm_location:rows[0].farm_location,
+                farm_technology_type : rows[0].farm_technology_type
+            }
+            myfarm.push(farm_info);
             get_sensor_info(farm_id, function (result, sensor_info){
                 if(result==true){
                     get_soil_moisture_info(farm_id, function (result, soil_moisture) {
                         if (result == true) {
                             cb(true, myfarm, sensor_info, soil_moisture);
                         } else {
-                            cb(true,myfarm, sensor_info, []);
+                            cb(true,myfarm, sensor_info, soil_moisture);
                         }
                     });
                 }else{
-                    cb(true,[],[],[])
+                    cb(true,myfarm, sensor_info, soil_moisture);
                 }
             });
         }
@@ -93,23 +126,20 @@ router.get('/:farm_id', function (req, res, next) {
                 user_id: user_id,
                 myfarm: myfarm,
                 sensor_info: sensor_info,
-                soil_moisture: soil_moisture
+                soil_moisture: soil_moisture,
+                farm_id: farm_id
             });
         } else {
-            res.render('index', {
-                user_id: user_id,
-                myfarm: [],
-                sensor_info: [],
-                soil_moisture: []
-            });
+            res.redirect('back');
         }
     })
 });
 
 // get farm form
-router.get('/farm_form', function (req, res, next) {
+router.get('/create/form', function (req, res, next) {
+    console.log("get farm_form!")
     var user_id=req.session.user_id;
-    res.render('farm', {
+    res.render('farm_form', {
         user_id: user_id,
     });
 });
@@ -119,15 +149,93 @@ router.post('/farm_form', function (req, res, next) {
     var farm_name=req.body.farm_name;
     var farm_location =req.body.farm_location;
     var user_id= req.session.user_id;
-    var sql2 = "INSERT INTO farms (farm_name, farm_location, user_id) VALUES (?,?,?)";
-    connection.query(sql2, [farm_name, farm_location, user_id], function (err) {
+    var farm_technology_type= req.body.farm_technology_type;
+    console.log("tech : ", farm_technology_type);
+    //farm_technology_type==1 (APRS), ==0 (LoRa)
+    var sql2 = "INSERT INTO farms (farm_name, farm_location, user_id, farm_technology_type) VALUES (?,?,?,?)";
+    connection.query(sql2, [farm_name, farm_location, user_id, farm_technology_type], function (err) {
         if (err) {
             console.log("inserting farms failed");
             throw err;
         } else {
             console.log("farm inserted successfully");
-            res.redirect('/');
+            var sql3 = "INSERT INTO sensors (farm_id, temperature, humidity, actuator) VALUES (?,?,?,?)";
+            connection.query(sql3, [farm_id, -1, -1, false], function (err) {
+                if (err) {
+                    console.log("inserting farms failed");
+                    throw err;
+                } else {
+                    res.redirect('/farmer');
+                }
+            });
         }
     })
 });
+
+//mqtt subscribe
+function mqtt_publish(result, farm_id, cb) {
+    var mqtt = require('mqtt')
+    var client  = mqtt.connect('mqtt://test.mosquitto.org')
+    if(result=="on"){
+        console.log("ON")
+        client.on('connect', function () {
+            console.log("connected");
+            client.publish('smartfarm', '1', function(err){
+                if(!err){
+                    var sqlquery3 = "UPDATE sensors SET actuator=? WHERE farm_id=?";
+                    connection.query(sqlquery3, [true, farm_id], function (err) {
+                        if (err) {
+                            console.log("inserting data failed");
+                            throw err;
+                        } else {
+                            console.log("inserting sensor data successfully");
+                            cb(true);
+                        }
+                    });
+                }else{
+                    cb(false);
+                }
+            });
+        }); 
+    }else if ("off"){
+        console.log("OFF")
+        client.on('connect', function () {
+            client.publish('smartfarm', '0', function(err){
+            if(!err){
+                console.log("connected");
+                var sqlquery3 = "UPDATE sensors SET actuator=? WHERE farm_id=?";
+                    connection.query(sqlquery3, [false, farm_id], function (err) {
+                        if (err) {
+                            console.log("inserting data failed");
+                            throw err;
+                        } else {
+                            console.log("inserting sensor data successfully");
+                            cb(true);
+                        }
+                    });
+            }else{
+                cb(false);
+            }
+          })
+        });
+    }
+}
+
+// insert farm info to db
+router.post('/actuator', function (req, res, next){
+    console.log("ACTUATOR !");
+    var result=req.body.result;
+    var farm_id=req.body.farm_id;
+    console.log("result : ", result);
+    console.log("farm id : ", farm_id);
+    mqtt_publish(result, farm_id, function (temp) {
+        if(temp == true){
+             res.jsonp({success : true})
+            }
+        else{
+             res.jsonp({success : false})
+        }
+    })
+});
+
 module.exports = router;

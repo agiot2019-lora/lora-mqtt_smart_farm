@@ -23,14 +23,14 @@ router.get('/', function (req, res, next) {
   }
 })
 
-router.get('/signup', function (req, res, next) {
-    res.render('signup', {
+router.get('/register', function (req, res, next) {
+    res.render('register', {
       title: "Sign up",
       user_id: -1,
     });
 });
 
-router.post('/signup', function (req, res, next) {
+router.post('/register', function (req, res, next) {
   var user_id = req.body.user_id;
   var user_pw = req.body.user_pw;
   var user_name = req.body.user_name;
@@ -49,7 +49,7 @@ router.post('/signup', function (req, res, next) {
           throw err;
         } else {
           console.log("user inserted successfully");
-          res.jsonp({ success: true, redirect_url: "/login" })
+          res.redirect("/login");
         }
       })
     } else {

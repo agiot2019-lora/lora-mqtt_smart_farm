@@ -134,6 +134,8 @@
                                   </ul>
                             </div>
                         </div>
+                   
+                        <%if (myfarms.length!=0) {%>
                         <div class="card">
                             <div class="card-body">
                                 Want to add another farm?
@@ -141,19 +143,31 @@
                             </div>
                         </div>
                     </div>
-                    <%for(var i=0; i<myfarms.length; i++){%>
-                    <div class="col-lg-8 col-xl-9">
-                        <h3>My Farm List</h3>
+                            <%for(var i=0; i<myfarms.length; i++){%>
+                            <div class="col-lg-8 col-xl-9">
+                                <h3>My Farm List</h3>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <img src="images/farm.png" height="200" width="200" alt="" align="left">
+                                         <p>
+                                            &nbsp <%=i+1%>. <br>
+                                            &nbsp<strong>Farm ID : </strong>  <%=myfarms[i].farm_id%> <br>
+                                            &nbsp<strong>Farm Name : </strong> <%=myfarms[i].farm_name%> <br>
+                                            &nbsp<strong>Farm Location :</strong> <%=myfarms[i].farm_location%> <br>
+                                            <a href="/farm/<%=myfarms[i].farm_id%>" ><button type="button" class="btn mb-1 btn-primary btn-lg" href="/farm/<%=myfarms[i].farm_id%>">Go</button></a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <%}%>
+                    <%}else{%>
+                        <div class="col-lg-8 col-xl-9">
+                            <h3>My Farm List</h3>
                         <div class="card">
                             <div class="card-body">
-                                <img src="images/farm.png" height="200" width="200" alt="" align="left">
-                                    <p>
-                                        &nbsp <%=i+1%>. <br>
-                                        &nbsp<strong>Farm ID : </strong>  <%=myfarms[i].farm_id%> <br>
-                                        &nbsp<strong>Farm Name : </strong> <%=myfarms[i].farm_name%> <br>
-                                        &nbsp<strong>Farm Location :</strong> <%=myfarms[i].farm_location%> <br>
-                                        <a href="/farm/<%=myfarms[i].farm_id%>" ><button type="button" class="btn mb-1 btn-primary btn-lg" href="/farm/<%=myfarms[i].farm_id%>">Go</button></a>
-                                    </p>
+                               <h5> No Farm Added</h5> <br>
+                                Want to add another farm? <br>
+                                <a href="/farm/create/form"><button type="button" class="btn mb-1 btn-primary btn-lg">Add Farm</button></a>
                             </div>
                         </div>
                     </div>
