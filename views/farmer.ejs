@@ -7,14 +7,20 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Farm Page</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
     <!-- Custom Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+<style>
+div {
+  text-align: justify;
+  text-justify: inter-word;
+}
+</style>
 
 </head>
 
 <body>
-
+       
     <!--*******************
         Preloader start
     ********************-->
@@ -41,8 +47,8 @@
         <div class="nav-header">
             <div class="brand-logo">
                 <a href="/">
-                    <b class="logo-abbr"><img src="images/logo.png" alt=""> </b>
-                    <span class="logo-compact"><img src="./images/logo-compact.png" alt=""></span>
+                    <b class="logo-abbr"><img src="/images/logo.png" alt=""> </b>
+                    <span class="logo-compact"><img src="/images/logo-compact.png" alt=""></span>
                     <span class="brand-title">
                         <img src="images/logo-text.png" alt="">
                     </span>
@@ -58,7 +64,6 @@
         ***********************************-->
         <div class="header">    
             <div class="header-content clearfix">
-                
                 <div class="nav-control">
                     <div class="hamburger">
                         <span class="toggle-icon"><i class="icon-menu"></i></span>
@@ -83,7 +88,7 @@
                         <li class="icons dropdown">
                             <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
                                 <span class="activity active"></span>
-                                <img src="images/farmer.png" height="40" width="40" alt="">
+                                <img src="/images/farmer.png" height="40" width="40" alt="">
                             </div>
                             <div class="drop-down dropdown-profile   dropdown-menu">
                                 <div class="dropdown-content-body">
@@ -93,7 +98,6 @@
                                         </li>
 
                                         <hr class="my-2">
-
                                         <li><a href="/logout"><i class="icon-key"></i> <span>Logout</span></a></li>
                                     </ul>
                                 </div>
@@ -111,7 +115,6 @@
             Content body start
         ***********************************-->
         <div class="content-body">
-
             <div class="row page-titles mx-0">
                 <div class="col p-md-0">
                     <ol class="breadcrumb">
@@ -120,42 +123,45 @@
                 </div>
             </div>
             <!-- row -->
-
+           
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-4 col-xl-3">
-                        <h3>User Information : </h3>
+                        <h3>User Information </h3>
                         <div class="card">
                             <div class="card-body">
-                                <ul class="card-profile__info">
-                                    <li><strong class="text-dark mr-4">Name : </strong> <span><%=myinfo[0].user_name%></span></li>
-                                    <li class="mb-1"><strong class="text-dark mr-4">ID : </strong> <span><%=myinfo[0].user_id%></span></li>
-                                    <li class="mb-1"><strong class="text-dark mr-4">Contact : </strong> <span><%=myinfo[0].user_contact%></span></li>
-                                  </ul>
+                                    <strong class="text-dark mr-4">Name : </strong> <%=myinfo[0].user_name%><br>
+                                    <strong class="text-dark mr-4">ID :  </strong> <%=myinfo[0].user_id%><br>
+                                    <strong class="text-dark mr-4">Contact : </strong> <%=myinfo[0].user_contact%><br>
                             </div>
                         </div>
-                   
                         <%if (myfarms.length!=0) {%>
                         <div class="card">
                             <div class="card-body">
-                                Want to add another farm?
-                                <a href="/farm/farm_form"><button type="button" class="btn mb-1 btn-primary btn-lg">Add Farm</button></a>
+                            <center>
+                                <h5>Want to add another farm?</h5>
+                                <a href="/farm/create/form"><button type="button" class="btn mb-1 btn-primary btn-lg">Add Farm</button></a>
+                            </center>
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-8 col-xl-9">
+                            <h3>My Farm List</h3>
                             <%for(var i=0; i<myfarms.length; i++){%>
                             <div class="col-lg-8 col-xl-9">
-                                <h3>My Farm List</h3>
                                 <div class="card">
                                     <div class="card-body">
-                                        <img src="images/farm.png" height="200" width="200" alt="" align="left">
-                                         <p>
-                                            &nbsp <%=i+1%>. <br>
-                                            &nbsp<strong>Farm ID : </strong>  <%=myfarms[i].farm_id%> <br>
-                                            &nbsp<strong>Farm Name : </strong> <%=myfarms[i].farm_name%> <br>
-                                            &nbsp<strong>Farm Location :</strong> <%=myfarms[i].farm_location%> <br>
+                                       <img src="/images/farm.png" height="200" width="200" alt="" align="left">
+                                        <div class="card">
+                                        <div class="card-body">
+                                            <h4><%=i+1%>.</h4>
+                                            <strong>Farm ID : </strong>  <%=myfarms[i].farm_id%> <br>
+                                            <strong>Farm Name : </strong> <%=myfarms[i].farm_name%> <br>
+                                            <strong>Farm Location :</strong> <%=myfarms[i].farm_location%> <br>
+                                            <br>
                                             <a href="/farm/<%=myfarms[i].farm_id%>" ><button type="button" class="btn mb-1 btn-primary btn-lg" href="/farm/<%=myfarms[i].farm_id%>">Go</button></a>
-                                        </p>
+                                        </div>
+                                    </div>
                                     </div>
                                 </div>
                             </div>
@@ -176,11 +182,10 @@
             </div>
             <!-- #/ container -->
         </div>
+        </div>
         <!--**********************************
             Content body end
         ***********************************-->
-        
-        
         <!--**********************************
             Footer start
         ***********************************-->
@@ -200,11 +205,11 @@
     <!--**********************************
         Scripts
     ***********************************-->
-    <script src="plugins/common/common.min.js"></script>
-    <script src="js/custom.min.js"></script>
-    <script src="js/settings.js"></script>
-    <script src="js/gleek.js"></script>
-    <script src="js/styleSwitcher.js"></script>
+    <script src="/plugins/common/common.min.js"></script>
+    <script src="/js/custom.min.js"></script>
+    <script src="/js/settings.js"></script>
+    <script src="/js/gleek.js"></script>
+    <script src="/js/styleSwitcher.js"></script>
 
 </body>
 

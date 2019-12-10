@@ -170,7 +170,6 @@ router.post('/get/soil/moisture', function (req, res, next) {
     })
 });
 
-
 // insert farm info to db
 router.post('/farm_form', function (req, res, next) {
     var farm_name=req.body.farm_name;
@@ -186,17 +185,26 @@ router.post('/farm_form', function (req, res, next) {
             throw err;
         } else {
             console.log("farm inserted successfully");
-            var sql3 = "INSERT INTO sensors (farm_id, temperature, humidity, actuator) VALUES (?,?,?,?)";
-            connection.query(sql3, [farm_id, -1, -1, false], function (err) {
+            var sql4 = "SELECT farm_id farms WHERE user_id=? AND farm_name = ? AND farm_location=? AND farm_technology_type=?";
+            connection.query(sql4, [user_id, farm_name, farm_location,farm_technology_type], function (err, rows) {
                 if (err) {
-                    console.log("inserting farms failed");
+                    console.log("finding farmid failed");
                     throw err;
                 } else {
-                    res.redirect('/farmer');
+                    var farm_id=rows[0].farm_id;            
+                    var sql3 = "INSERT INTO sensors (farm_id, temperature, humidity, actuator) VALUES (?,?,?,?)";
+                    connection.query(sql3, [farm_id, -1, -1, false], function (err) {
+                    if (err) {
+                        console.log("inserting farms failed");
+                        throw err;
+                    } else {
+                        res.redirect('/farmer');
+                    }
+                    });
                 }
-            });
+            })
         }
-    })
+    });
 });
 
 //mqtt subscribe
